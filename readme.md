@@ -2,6 +2,11 @@
 
 This is an alternative approach to the code for the [Arduino Twinkle Lights](https://github.com/johnwargo/Arduino-Twinkle-Lights) project. You can find a complete project write-up at [johnwargo.com](http://johnwargo.com/microcontrollers-single-board-computers/arduino-twinkle-lights.html). For the original project, I used two strands of lights, and the code was pretty simple. When you add a third (or more) strand, you need a different approach. To demonstrate this, I built a project that implements a US 4th of July twinkle light jar with Red, White and Blue LEDs. This repository contains the code for that project.
 
+Here's a video of the project in action:
+
+<iframe src="https://player.vimeo.com/video/199841714" width="640" height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<p><a href="https://vimeo.com/199841714">Arduino Twinkle Lights: Red, White, &amp; Blue</a> from <a href="https://vimeo.com/user39135142">John Wargo</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+
 The hardware implementation is basically the same; the core differences in this version are the following:
 
 Instead of defining a variable for each output pin as I did for the [Arduino Twinkle Lights](https://github.com/johnwargo/Arduino-Twinkle-Lights):
