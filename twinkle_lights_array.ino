@@ -35,23 +35,25 @@ void setup() {
   downPin = -1;
   upPin = 0;
 
-  //We need one of the strands to be illuminated to start,
-  //so start by winding the first strand up to full illumination
-  for (int i = 0; i <= maxAnalog; i++) {
-    //Write the voltage value
-    analogWrite(ledPins[0], i);
-    //Pause for a little while
-    delay(delayVal);
+  //To show everything's working, start by turning
+  //all of the strands on at the same time
+  for (int i = 0; i < numPins; i++) {
+    analogWrite(ledPins[i], maxAnalog);
   }
-
-  //Wait a second before continuing
-  delay(1000);
+  delay(1000);    //Wait a second, for effect
+  //Then turn all off, except for the first one
+  for (int i = 1; i < numPins; i++) {
+    analogWrite(ledPins[i], 0);
+  }
+  delay(1000);    //Wait a second, for effect
+  //At this point, the first strand is on, waiting for the 
+  //loop to start fading the strands in sequence
 }
 
 void loop() {
   //Increment our pin designators
-  downPin = getNextPin(downPin);
-  upPin = getNextPin(upPin);  
+  downPin = getNextIndex(downPin);
+  upPin = getNextIndex(upPin);
 
   //Loop through the voltage output values (ranging from 0 to 255)
   //incrementing by 1
@@ -67,17 +69,17 @@ void loop() {
   delay(1000);
 }
 
-int getNextPin(int currentPin) {
-  //Get the next array pointer
+int getNextIndex(int currentIndex) {
+  //Get the next array index
   //start by incrementing the current pin
-  int pin = ++currentPin;
+  int idx = ++currentIndex;
   //does pin exceed the bounds of the array?
   //I could use a == comparison here as pin should never go above numPins,
   //unless I have a logic error in the code, but I'm going to check anyway
-  if (pin >= numPins) {
+  if (idx >= numPins) {
     //Then reset to the beginning of the array
-    pin = 0;
+    idx = 0;
   }
-  return pin;
+  return idx;
 }
 

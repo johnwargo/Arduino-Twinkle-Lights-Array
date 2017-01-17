@@ -1,10 +1,10 @@
 # Arduino Twinkle Lights in a Jar (Array Version)
 
-This is an alternative approach to the code for the [Arduino Twinkle Lights](https://github.com/johnwargo/Arduino-Twinkle-Lights) project. For the original project, I used two strands of lights, so the code was pretty simple. If you want to expand the number of LED Strands, to implement a US 4th of July twinkle light jar with Red, White and Blue LEDs for example, then you'll need the array-based approach which is implemented here.
+This is an alternative approach to the code for the [Arduino Twinkle Lights](https://github.com/johnwargo/Arduino-Twinkle-Lights) project. You can find a complete project write-up at [johnwargo.com](http://johnwargo.com/microcontrollers-single-board-computers/arduino-twinkle-lights.html). For the original project, I used two strands of lights, and the code was pretty simple. When you add a third (or more) strand, you need a different approach. To demonstrate this, I built a project that implements a US 4th of July twinkle light jar with Red, White and Blue LEDs. This repository contains the code for that project.
 
-The hardware implementation is the same; the core difference in this version is in the following code:
+The hardware implementation is basically the same; the core differences in this version are the following:
 
-Instead of defining a variable for each output pin:
+Instead of defining a variable for each output pin as I did for the [Arduino Twinkle Lights](https://github.com/johnwargo/Arduino-Twinkle-Lights):
 
 	//Analog output pin assignments
 	const int pin0 = 9;
@@ -20,36 +20,40 @@ The application uses an array to hold the output pin values:
 	//elements in the array
 	const int numPins = 3; 
 
-Plus a function to use to get the next pin array element:
+Populate the `ledPins` array with the list of Arduino analog output pins the strands are connected to (the strand's positive wires). Next, update the `numPins` constant with the number of strands (or pins - same thing) you're using.  
+ 
+I added a function to use to get the next index array element:
 
-	int getNextPin(int currentPin) {
-	  //Get the next array pointer
+	int getNextIndex(int currentIndex) {
+	  //Get the next array index
 	  //start by incrementing the current pin
-	  int pin = ++currentPin;
+	  int idx = ++currentIndex;
 	  //does pin exceed the bounds of the array?
-	  //I could use a == comparison here as pin should never go above numPins, 
-	  //unless I have a logic error in the code, but I'm going to check anyway  
-	  if (pin >= numPins) {
+	  //I could use a == comparison here as pin should never go above numPins,
+	  //unless I have a logic error in the code, but I'm going to check anyway
+	  if (idx >= numPins) {
 	    //Then reset to the beginning of the array
-	    pin = 0;
+	    idx = 0;
 	  }
-	  return pin;
+	  return idx;
 	}
+
+Before starting each loop iteration, the `upPin` and `downPin` variables are updated to point to the next elements in the `ledPins` array. This enables the application to maintain a sliding window into the array - pointing to two sequential analog output pins as it iterates through the array.
 
 The loop is greatly simplified as well:
 
 	void loop() {
 	  //Increment our pin designators
-	  downPin = getNextPin(downPin);
-	  upPin = getNextPin(upPin);
-	  
+	  downPin = getNextIndex(downPin);
+	  upPin = getNextIndex(upPin);
+	
 	  //Loop through the voltage output values (ranging from 0 to 255)
 	  //incrementing by 1
 	  for (int i = 0; i <= maxAnalog; i++) {
 	    //Drive the upPin up to maxAnalog
-	    analogWrite(upPin, i);
+	    analogWrite(ledPins[upPin], i);
 	    //While simultaneously driving downPin down to 0
-	    analogWrite(downPin, maxAnalog - i);
+	    analogWrite(ledPins[downPin], maxAnalog - i);
 	    //Pause for a little while
 	    delay(delayVal);
 	  }
@@ -57,6 +61,7 @@ The loop is greatly simplified as well:
 	  delay(1000);
 	}
 
+That's it, you can find the complete hardware assembly instructions on [johnwargo.com](http://johnwargo.com/microcontrollers-single-board-computers/arduino-twinkle-lights.html). 
 
 ***
 
