@@ -20,9 +20,9 @@ The application uses an array to hold the output pin values:
 	//elements in the array
 	const int numPins = 3; 
 
-Populate the `ledPins` array with the list of Arduino analog output pins the strands are connected to (the strand's positive wires). Next, update the `numPins` constant with the number of strands (or pins - same thing) you're using.  
+Populate the `ledPins` array with the list of Arduino analog output pins the strands are connected to (the strand's positive wires). The pins don't have to be in sequence like the example shown there. Connect the strands to whichever analog pins you want, just make sure to populate the array in the order in which you want the pins used. Next, update the `numPins` constant with the number of strands (or pins - same thing) you're using.  
  
-I added a function to use to get the next index array element:
+I added a function to use to get the next array index:
 
 	int getNextIndex(int currentIndex) {
 	  //Get the next array index
